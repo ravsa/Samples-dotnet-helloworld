@@ -21,13 +21,43 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: UseDotNet@2
+  displayName: "🏗 select: .Net core SDK version"
+  inputs:
+    version: 6.0.x
+    installationPath: "$(Agent.ToolsDirectory)"
+
+- task: NuGetToolInstaller@0
+  displayName: "🏗 select: nuget version "
+  condition: succeeded()
+  inputs:
+    versionSpec: 6.0.0
+
+- task: NuGetCommand@2
+  displayName: "🏗 run: nuget restore"
+  condition: succeeded()
+  inputs:
+    restoreSolution: $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
+    feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
+
 - task: DotNetCoreCLI@2
   displayName: "🏗 run: dotnet restore"
   condition: succeeded()
   inputs:
     command: restore
     projects: |
-      $(System.DefaultWorkingDirectory)
+      $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
+    feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
+
+- task: DotNetCoreCLI@2
+  displayName: "🏗 run: dotnet restore"
+  condition: succeeded()
+  inputs:
+    command: restore
+    projects: |
+      $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
     feedsToUse: config
 
 # - task: VSBuild@1

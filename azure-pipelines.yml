@@ -34,6 +34,7 @@ steps:
     versionSpec: 6.0.0
 
 - task: NuGetCommand@2
+  System.Debug: true
   displayName: "🏗 run: nuget restore"
   condition: succeeded()
   inputs:
@@ -59,6 +60,7 @@ steps:
     projects: |
       $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
     feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
 
 # - task: VSBuild@1
 #   inputs:

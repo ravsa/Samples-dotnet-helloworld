@@ -34,7 +34,6 @@ steps:
     versionSpec: 6.0.0
 
 - task: NuGetCommand@2
-  System.Debug: true
   displayName: "🏗 run: nuget restore"
   condition: succeeded()
   inputs:

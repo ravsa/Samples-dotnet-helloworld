@@ -84,6 +84,6 @@ steps:
     searchFolder: $(System.DefaultWorkingDirectory)/test
     diagnosticEnabled: true
     testAssemblyVer2: |
-      **\UnitTest1.dll
+      **\helloworld.dll
       !**\bin\**\ref\**
     configuration: '$(buildConfiguration)'

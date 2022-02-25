@@ -13,7 +13,7 @@
           <CodeCoverage>
             <ModulePaths>
               <Include>
-                <ModulePath>.*\\Hello\.*\.dll</ModulePath>
+                <ModulePath>.*\\helloworld-proj.dll</ModulePath>
               </Include>
             </ModulePaths>
           </CodeCoverage>

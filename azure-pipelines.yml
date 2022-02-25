@@ -76,7 +76,6 @@ steps:
     publishRunAttachments: true
     runSettingsFile: $(System.DefaultWorkingDirectory)/test/test.runsettings
     searchFolder: $(System.DefaultWorkingDirectory)/test
-    platform: '$(buildPlatform)'
     diagnosticEnabled: true
     testAssemblyVer2: |
       **\UnitTest1.dll

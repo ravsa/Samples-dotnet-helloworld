@@ -1,0 +1,89 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  default
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: UseDotNet@2
+  displayName: "🏗 select: .Net core SDK version"
+  inputs:
+    version: 6.0.x
+    installationPath: "$(Agent.ToolsDirectory)"
+
+- task: NuGetToolInstaller@0
+  displayName: "🏗 select: nuget version "
+  condition: succeeded()
+  inputs:
+    versionSpec: 6.0.0
+
+- task: NuGetCommand@2
+  displayName: "🏗 run: nuget restore"
+  condition: succeeded()
+  inputs:
+    restoreSolution: $(System.DefaultWorkingDirectory)/helloworld-sln.sln
+    feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
+
+- task: DotNetCoreCLI@2
+  displayName: "🏗 run: dotnet restore"
+  condition: succeeded()
+  inputs:
+    command: restore
+    projects: |
+      $(System.DefaultWorkingDirectory)/helloworld-sln.sln
+    feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
+
+- task: DotNetCoreCLI@2
+  displayName: "🏗 run: dotnet restore"
+  condition: succeeded()
+  inputs:
+    command: restore
+    projects: |
+      $(System.DefaultWorkingDirectory)/helloworld-sln.sln
+    feedsToUse: config
+    nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    
+- task: PowerShell@2
+  inputs:
+    targetType: inline
+    script: |
+      ls -R $(Build.SourcesDirectory)
+
+- task: VSTest@2
+  inputs:
+    testRunTitle: "running test cases"
+    platform: "x64"
+    codeCoverageEnabled: true
+    publishRunAttachments: true
+    runSettingsFile: $(System.DefaultWorkingDirectory)/test/test.runsettings
+    searchFolder: $(System.DefaultWorkingDirectory)/test/
+    diagnosticEnabled: true
+    testAssemblyVer2: |
+      **\bin\**\helloworld.dll
+      !**\bin\**\ref\**
+    configuration: '$(buildConfiguration)'

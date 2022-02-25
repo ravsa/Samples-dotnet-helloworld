@@ -6,6 +6,7 @@ namespace helloworld_proj
     {
         static void Main(string[] args)
         {
+            HelloWorld hw = new HelloWorld(); 
             Console.WriteLine("Hello World!");
         }
     }

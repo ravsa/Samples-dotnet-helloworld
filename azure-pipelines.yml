@@ -37,7 +37,7 @@ steps:
   displayName: "🏗 run: nuget restore"
   condition: succeeded()
   inputs:
-    restoreSolution: $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
+    restoreSolution: $(System.DefaultWorkingDirectory)/helloworld-sln.sln
     feedsToUse: config
     nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
 
@@ -47,7 +47,7 @@ steps:
   inputs:
     command: restore
     projects: |
-      $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
+      $(System.DefaultWorkingDirectory)/helloworld-sln.sln
     feedsToUse: config
     nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
 
@@ -57,13 +57,12 @@ steps:
   inputs:
     command: restore
     projects: |
-      $(System.DefaultWorkingDirectory)/samples-dotnet-helloworld.sln
+      $(System.DefaultWorkingDirectory)/helloworld-sln.sln
     feedsToUse: config
     nugetConfigPath: $(System.DefaultWorkingDirectory)/NuGet.Config
 
 - task: VSBuild@1
   inputs:
-    vsVersion: "17.0"
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'

@@ -19,5 +19,9 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../helloworld-proj/helloworld-proj.csproj" />
+  </ItemGroup>
+
 
 </Project>

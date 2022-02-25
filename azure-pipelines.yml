@@ -81,7 +81,7 @@ steps:
     codeCoverageEnabled: true
     publishRunAttachments: true
     runSettingsFile: $(System.DefaultWorkingDirectory)/test/test.runsettings
-    searchFolder: $(System.DefaultWorkingDirectory)/test
+    searchFolder: $(System.DefaultWorkingDirectory)/test/helloworld/bin
     diagnosticEnabled: true
     testAssemblyVer2: |
       **\helloworld.dll

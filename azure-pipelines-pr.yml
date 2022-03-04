@@ -87,9 +87,10 @@ steps:
       **\bin\**\helloworld.dll
       !**\bin\**\ref\**
     configuration: '$(buildConfiguration)'
-    
+
 - task: PublishTestResults@2
   inputs:
+    displayName: "publish test"
     testResultsFormat: 'VSTest'
     testResultsFiles: '**/*.trx' 
     # searchFolder: '$(System.DefaultWorkingDirectory)' # Optional

@@ -92,8 +92,8 @@ steps:
   inputs:
     targetType: inline
     script: |
-      ls -R $(Build.SourcesDirectory)
-      
+      ls -R $(System.DefaultWorkingDirectory)
+
 - task: PublishTestResults@2
   inputs:
     displayName: "publish test"

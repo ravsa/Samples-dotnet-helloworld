@@ -92,7 +92,8 @@ steps:
   inputs:
     displayName: "publish test"
     testResultsFormat: 'VSTest'
-    testResultsFiles: '**/*.trx' 
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(Agent.TempDirectory)\TestResults'
     # searchFolder: '$(System.DefaultWorkingDirectory)' # Optional
     # mergeTestResults: false # Optional
     # failTaskOnFailedTests: false # Optional

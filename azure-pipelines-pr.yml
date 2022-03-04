@@ -88,6 +88,12 @@ steps:
       !**\bin\**\ref\**
     configuration: '$(buildConfiguration)'
 
+- task: PowerShell@2
+  inputs:
+    targetType: inline
+    script: |
+      ls -R $(Build.SourcesDirectory)
+      
 - task: PublishTestResults@2
   inputs:
     displayName: "publish test"

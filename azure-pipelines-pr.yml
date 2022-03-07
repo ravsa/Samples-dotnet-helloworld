@@ -78,9 +78,7 @@ steps:
   displayName: "Test"
   inputs:
     command: test
-    projects: |
-      **\bin\**\helloworld.dll
-      !**\bin\**\ref\**
+    projects: $(System.DefaultWorkingDirectory)/test/**/*.csproj
     arguments: '--no-restore --collect:"XPlat Code Coverage"'
 
 

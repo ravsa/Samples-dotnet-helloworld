@@ -81,7 +81,7 @@ steps:
     projects: |
       **\bin\**\helloworld.dll
       !**\bin\**\ref\**
-    arguments: '--no-restore --collect "XPlat Code Coverage"'
+    arguments: '--no-restore --collect:"XPlat Code Coverage"'
 
 
 - task: PublishCodeCoverageResults@1

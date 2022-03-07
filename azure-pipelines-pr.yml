@@ -74,31 +74,59 @@ steps:
     script: |
       ls -R $(Build.SourcesDirectory)
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
+  displayName: "Test"
   inputs:
-    testRunTitle: "running test cases"
-    platform: "x64"
-    codeCoverageEnabled: true
-    publishRunAttachments: true
-    runSettingsFile: $(System.DefaultWorkingDirectory)/test/test.runsettings
-    searchFolder: $(System.DefaultWorkingDirectory)/test/
-    diagnosticEnabled: true
-    testAssemblyVer2: |
+    command: test
+    projects: |
       **\bin\**\helloworld.dll
       !**\bin\**\ref\**
-    configuration: '$(buildConfiguration) --collect:"XPlat Code Coverage"'
+    arguments: '--no-restore --collect "Code Coverage" --logger trx --results-directory "TestResults/Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
 
-- task: PowerShell@2
+- task: reportgenerator@5
   inputs:
-    targetType: inline
-    script: |
-      ls -R $(Agent.TempDirectory)
+    reports: '$(Build.SourcesDirectory)/TestResults/Coverage/**/**.cobertura.xml'
+    targetdir: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports'
+    reporttypes: 'HtmlInline_AzurePipelines_Dark;Cobertura'
 
 - task: PublishTestResults@2
   inputs:
-    displayName: "publish test"
-    testResultsFormat: 'Cobertura'
-    summaryFileLocation: $(Agent.TempDirectory)/*/coverage.cobertura.xml
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+    mergeTestResults: true
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports/Cobertura.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports'
+    
+
+# - task: VSTest@2
+#   inputs:
+#     testRunTitle: "running test cases"
+#     platform: "x64"
+#     codeCoverageEnabled: true
+#     publishRunAttachments: true
+#     runSettingsFile: $(System.DefaultWorkingDirectory)/test/test.runsettings
+#     searchFolder: $(System.DefaultWorkingDirectory)/test/
+#     diagnosticEnabled: true
+#     testAssemblyVer2: |
+#       **\bin\**\helloworld.dll
+#       !**\bin\**\ref\**
+#     configuration: '$(buildConfiguration) --collect:"XPlat Code Coverage"'
+
+# - task: PowerShell@2
+#   inputs:
+#     targetType: inline
+#     script: |
+#       ls -R $(Agent.TempDirectory)
+
+# - task: PublishTestResults@2
+#   inputs:
+#     displayName: "publish test"
+#     testResultsFormat: 'Cobertura'
+#     summaryFileLocation: $(Agent.TempDirectory)/*/coverage.cobertura.xml
     # testResultsFiles: '$(Agent.TempDirectory)\TestResults\**\*.trx'
     # searchFolder: '$(Agent.TempDirectory)'
     # searchFolder: '$(System.DefaultWorkingDirectory)' # Optional

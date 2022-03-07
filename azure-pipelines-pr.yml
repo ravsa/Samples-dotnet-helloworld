@@ -81,26 +81,15 @@ steps:
     projects: |
       **\bin\**\helloworld.dll
       !**\bin\**\ref\**
-    arguments: '--no-restore --collect "Code Coverage" --logger trx --results-directory "TestResults/Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+    arguments: '--no-restore --collect "XPlat Code Coverage"'
 
-- task: reportgenerator@5
-  inputs:
-    reports: '$(Build.SourcesDirectory)/TestResults/Coverage/**/**.cobertura.xml'
-    targetdir: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports'
-    reporttypes: 'HtmlInline_AzurePipelines_Dark;Cobertura'
-
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'VSTest'
-    testResultsFiles: '**/*.trx'
-    mergeTestResults: true
 
 - task: PublishCodeCoverageResults@1
+  displayName: "Publish code coverage"
   inputs:
-    codeCoverageTool: 'cobertura'
-    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports/Cobertura.xml'
-    reportDirectory: '$(Build.SourcesDirectory)/TestResults/Coverage/Reports'
-    
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
+
 
 # - task: VSTest@2
 #   inputs:
